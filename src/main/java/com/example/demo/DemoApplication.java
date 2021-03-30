@@ -37,7 +37,7 @@ public class DemoApplication {
                 DeliverCallback deliverCallback = (consumerTag, delivery) -> {
                     String message = new String(delivery.getBody(), "UTF-8");
                     System.out.println("Consumer " + consumerTag + " received '" + message + "'");
-                    try{ Thread.sleep(5000); }catch (Exception e) {}
+                    try{ Thread.sleep(2000); }catch (Exception e) {}
                     ch1.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                     if (Integer.parseInt(message) == 7) {
                         try{
@@ -54,6 +54,7 @@ public class DemoApplication {
         });
         t1.start();
 
+        Thread.sleep(1000);
         new Thread(() -> {
             System.out.println("Second thread started!");
 
@@ -63,7 +64,7 @@ public class DemoApplication {
                 ch2.basicConsume("my-queue", (consumerTag, delivery) -> {
                             String message = new String(delivery.getBody(), "UTF-8");
                             System.out.println("Consumer " + Thread.currentThread().getName() + " " + consumerTag + " received '" + message + "'");
-                            try{ Thread.sleep(5000); }catch (Exception e) {}
+                            try{ Thread.sleep(2000); }catch (Exception e) {}
                             ch2.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
                         },
                         consumerTag -> {});
